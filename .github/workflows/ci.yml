@@ -11,19 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Specify a concrete version
-      
-      - name: Cache Python packages
-        uses: actions/cache@v2
+          python-version: 3.x
+      - uses: actions/cache@v2
         with:
+          key: ${{ github.ref }}
           path: .cache
-          key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}  # Use a stable key
-          restore-keys: |
-            ${{ runner.os }}-python-
-      
-      - run: pip install -r requirements.txt  # Use a requirements file for dependencies
-      
+      - run: pip install mkdocs-material
+      - run: pip install pillow cairosvg
       - run: mkdocs gh-deploy --force
